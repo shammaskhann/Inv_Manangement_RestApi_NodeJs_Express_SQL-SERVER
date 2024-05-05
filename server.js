@@ -49,7 +49,7 @@ sql.connect(config, err => {
 
 
 app.get('/api/db-connection-status', (req, res) => {
-    res.send({ dbConnected });
+    res.status(200).send({ dbConnected });
 });
 
 app.get('/', (req, res) => {
