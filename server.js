@@ -2,6 +2,7 @@ const express = require('express');
 const app = express(); 
 const port = 3000; 
 const sql = require('mssql'); 
+const { DefaultAzureCredential } = require('@azure/identity');
 const customers = require('./src/api/Customers'); 
 const bodyParser = require('body-parser'); 
 // Use body-parser middleware
