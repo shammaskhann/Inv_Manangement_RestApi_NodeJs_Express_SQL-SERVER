@@ -2,7 +2,6 @@ const express = require('express');
 const app = express(); 
 const port = 3000; 
 const sql = require('mssql'); 
-const { DefaultAzureCredential } = require('@azure/identity');
 const customers = require('./src/api/Customers'); 
 const bodyParser = require('body-parser'); 
 // Use body-parser middleware
@@ -37,19 +36,28 @@ var config = {
 
 
 app.use('/api/customers', customers);
-let dbConnected = false;
 
-sql.connect(config, err => {
-    if (err) {
-        console.log("Error while connecting to database :- " + err);
-        throw err;
-    }
-    dbConnected = true;
-    console.log("Connection Successful!");
-});
+
+// sql.connect(config, err => {
+//     if (err) {
+//         console.log("Error while connecting to database :- " + err);
+//         throw err;
+//     }
+//     dbConnected = true;
+//     console.log("Connection Successful!");
+// });
 
 
 app.get('/api/db-connection-status', (req, res) => {
+    let dbConnected = false;
+    sql.connect(config, err => {
+        if (err) {
+            console.log("Error while connecting to database :- " + err);
+            throw err;
+        }
+        dbConnected = true;
+        console.log("Connection Successful!");
+    });
     res.status(200).send({ dbConnected });
 });
 
