@@ -49,16 +49,36 @@ sql.connect(config, err => {
 });
 
 
+// app.get('/api/db-connection-status', async (req, res) => {
+//     let dbConnected = false;
+//     const pool = new sql.ConnectionPool(config, err => {
+//         if (err) {
+//             console.log("Error while connecting to database :- " + err);
+//             throw err;
+//         }
+//         dbConnected = true;
+//         console.log("Connection Successful!");
+//     });
+//     res.status(200).send({ dbConnected });
+// });
 app.get('/api/db-connection-status', async (req, res) => {
     let dbConnected = false;
-    const pool = new sql.ConnectionPool(config, err => {
-        if (err) {
-            console.log("Error while connecting to database :- " + err);
-            throw err;
-        }
-        dbConnected = true;
-        console.log("Connection Successful!");
-    });
+    try {
+        await new Promise((resolve, reject) => {
+            new sql.ConnectionPool(config, err => {
+                if (err) {
+                    console.log("Error while connecting to database :- " + err);
+                    reject(err);
+                } else {
+                    dbConnected = true;
+                    console.log("Connection Successful!");
+                    resolve();
+                }
+            });
+        });
+    } catch (err) {
+        return res.status(500).send({ dbConnected });
+    }
     res.status(200).send({ dbConnected });
 });
 

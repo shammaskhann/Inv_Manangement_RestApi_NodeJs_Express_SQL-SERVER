@@ -62,6 +62,7 @@ class Customer {
             await pool.close();
         }
     }
+    
     // // Fetch all customers
     // static async fetchAll() {
     //     try {
