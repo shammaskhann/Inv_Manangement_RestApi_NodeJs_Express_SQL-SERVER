@@ -38,29 +38,27 @@ var config = {
 app.use('/api/customers', customers);
 
 
-let dbConnected = false;
+
 sql.connect(config, err => {
     if (err) {
         console.log("Error while connecting to database :- " + err);
         throw err;
     }
-    dbConnected = true;
+   
     console.log("Connection Successful!");
 });
 
 
 app.get('/api/db-connection-status', async (req, res) => {
-    // let dbConnected = false;
-    //  sql.connect(config, err => {
-        
-    //     if (err) {
-    //         console.log("Error while connecting to database :- " + err);
-    //         throw err;
-    //     }
-    //     dbConnected = true;
-    //     console.log("Connection Successful!");
-    // });
-    // console.log("DB Connected: ", dbConnected);
+    let dbConnected = false;
+    const pool = new sql.ConnectionPool(config, err => {
+        if (err) {
+            console.log("Error while connecting to database :- " + err);
+            throw err;
+        }
+        dbConnected = true;
+        console.log("Connection Successful!");
+    });
     res.status(200).send({ dbConnected });
 });
 
