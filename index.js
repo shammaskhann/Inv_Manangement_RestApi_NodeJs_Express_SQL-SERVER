@@ -4,6 +4,7 @@ const port = 3000;
 const sql = require('mssql'); 
 const customers = require('./src/api/Customers'); 
 const bodyParser = require('body-parser'); 
+const products = require('./src/api/products');
 // Use body-parser middleware
 app.use(express.json());
 app.use(bodyParser.json());
@@ -36,6 +37,8 @@ var config = {
 
 
 app.use('/api/customers', customers);
+//products
+app.use('/api/products', products);
 
 
 
