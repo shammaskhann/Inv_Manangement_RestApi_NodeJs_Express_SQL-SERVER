@@ -5,7 +5,7 @@ const sql = require('mssql');
 const customers = require('./src/api/Customers'); 
 const bodyParser = require('body-parser'); 
 const products = require('./src/api/Products/product');
-//const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
+const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
 const config = require('./config/configDB');
 const connectionStatus = require('./src/api/Connection Status/connectionStatus');
 
@@ -14,14 +14,15 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 
-//smalltaginfo
-//app.use('/api/smalltaginfo', smalltaginfo);
+
 //customer
 app.use('/api/customers', customers);
 //products
 app.use('/api/products', products);
 //connection status
 app.use('/api/db-connection-status', connectionStatus);
+//smalltaginfo
+app.use('/api/smalltaginfo', smalltaginfo);
 
 
 sql.connect(config).then(pool => {

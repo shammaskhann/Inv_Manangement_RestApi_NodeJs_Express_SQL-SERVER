@@ -1,17 +1,17 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// //get no of orders today 
-// router.get('/getNoOfOrdersToday',async (req,res) => {
-//     const pool = req.app.get('dbPool');
-//     try{
-//         const result= await pool.request().execute("dbo.getTodayOrders");
-//         res.status(200).send(result.recordset);
-//     }catch(err){
-//         res.status(500).send({message: err.message});
-//     }
-// }
-// );
+//get no of orders today 
+router.get('/getNoOfOrdersToday',async (req,res) => {
+    const pool = req.app.get('dbPool');
+    try{
+        const result= await pool.request().execute("dbo.getTodayOrders");
+        res.status(200).send(result.recordset);
+    }catch(err){
+        res.status(500).send({message: err.message});
+    }
+}
+);
 
 // //get Total Sales Today
 // router.get('/getTotalSalesToday',async (req,res) => {
@@ -62,4 +62,4 @@
 // );
 
 
-// module.exports = router;
+module.exports = router;
