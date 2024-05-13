@@ -63,10 +63,9 @@ sql.connect(config).then(pool => {
 
     // Define your routes after the database connection is established
     const customers = require('./src/api/Customers'); 
-    const products = require('./src/api/Products/product');
     const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
     const connectionStatus = require('./src/api/Connection Status/connectionStatus');
-
+    const products = require('./src/api/Product/product');
     // Use express.json middleware
     app.use(express.json());
 
