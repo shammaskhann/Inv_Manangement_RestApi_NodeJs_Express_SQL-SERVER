@@ -89,3 +89,4 @@ sql.connect(config).then(pool => {
     console.log("Error while connecting to database: ", err);
     process.exit(1);
 });
+module.exports = app;
