@@ -5,10 +5,10 @@ const router = express.Router();
 router.get('/getNoOfOrdersToday',async (req,res) => {
     const pool = req.app.get('dbPool');
     try{
-        console.log("Executing getNoOfOrdersToday");
-        console.log("Procedure: exec getNoOfOrdersToday");
+        // console.log("Executing getNoOfOrdersToday");
+        // console.log("Procedure: exec getNoOfOrdersToday");
         const result= await pool.request().execute("dbo.getTodayOrders");
-        console.log("Result: ",result.recordset);
+        // console.log("Result: ",result.recordset);
         res.status(200).send(result.recordset);
     }catch(err){
         res.status(500).send({message: err.message});

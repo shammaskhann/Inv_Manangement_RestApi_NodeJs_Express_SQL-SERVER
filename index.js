@@ -8,6 +8,7 @@ const products = require('./src/api/products/product');
 const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
 const config = require('./config/configDB');
 const connectionStatus = require('./src/api/Connection Status/connectionStatus');
+
 // Use body-parser middleware
 app.use(express.json());
 app.use(bodyParser.json());
@@ -23,27 +24,6 @@ app.use('/api/products', products);
 app.use('/api/db-connection-status', connectionStatus);
 
 
-
-// sql.connect(config, err => {
-//     if (err) {
-//         console.log("Error while connecting to database :- " + err);
-//         throw err;
-//     }
-   
-//     console.log("Connection Successful!");
-// });
-// sql.connect(config, err => {
-//     if (err) {
-//       console.log("Error while connecting to database: ", err);
-//       process.exit(1);
-//     }
-  
-//     // store the connection pool in the app object
-//     app.set('dbPool', sql);
-  
-//     console.log("Database connection successful!");
-//   });
-
 sql.connect(config).then(pool => {
     // store the connection pool in the app object
     app.set('dbPool', pool);
@@ -53,7 +33,6 @@ sql.connect(config).then(pool => {
     console.log("Error while connecting to database: ", err);
     process.exit(1);
 });
-
 
 
 app.get('/', (req, res) => {
