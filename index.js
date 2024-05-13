@@ -4,86 +4,57 @@ const port = 3000;
 const sql = require('mssql'); 
 const customers = require('./src/api/Customers'); 
 const bodyParser = require('body-parser'); 
-const products = require('./src/api/products');
+const products = require('./src/api/products/product');
+const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
+const config = require('./config/configDB');
+const connectionStatus = require('./src/api/Connection Status/connectionStatus');
 // Use body-parser middleware
 app.use(express.json());
 app.use(bodyParser.json());
 
-// var config = {
-//     "user": "shammas", // Database username
-//     "password": "shammas0312", // Database password
-//     //"server": "192.168.18.127", // Server IP address
-//     "database": "shopify_Clone", // Database name
-//     "options": {
-//         "encrypt": false // Disable encryption
-//     }
-// }
 
-//NodeJsApi
-//shammas0312
-//For database Hosted
-var config = {
-    "user": "projectbukc_ShopifyClone", // Database username
-    "password": "project0312", // Database password
-    "server": "sql.bsite.net", // Server name
-    "database": "projectbukc_ShopifyClone", // Database name
-    "options": {
-        "encrypt": true, // Disable encryption
-        "instanceName": "MSSQL2016", // Instance name
-        "connectionTimeout": 30000,
-        "trustServerCertificate": true
-    }
-}
-
-
+//smalltaginfo
+app.use('/api/smalltaginfo', smalltaginfo);
+//customer
 app.use('/api/customers', customers);
 //products
 app.use('/api/products', products);
+//connection status
+app.use('/api/db-connection-status', connectionStatus);
 
 
 
-sql.connect(config, err => {
-    if (err) {
-        console.log("Error while connecting to database :- " + err);
-        throw err;
-    }
+// sql.connect(config, err => {
+//     if (err) {
+//         console.log("Error while connecting to database :- " + err);
+//         throw err;
+//     }
    
-    console.log("Connection Successful!");
-});
-
-
-// app.get('/api/db-connection-status', async (req, res) => {
-//     let dbConnected = false;
-//     const pool = new sql.ConnectionPool(config, err => {
-//         if (err) {
-//             console.log("Error while connecting to database :- " + err);
-//             throw err;
-//         }
-//         dbConnected = true;
-//         console.log("Connection Successful!");
-//     });
-//     res.status(200).send({ dbConnected });
+//     console.log("Connection Successful!");
 // });
-app.get('/api/db-connection-status', async (req, res) => {
-    let dbConnected = false;
-    try {
-        await new Promise((resolve, reject) => {
-            new sql.ConnectionPool(config, err => {
-                if (err) {
-                    console.log("Error while connecting to database :- " + err);
-                    reject(err);
-                } else {
-                    dbConnected = true;
-                    console.log("Connection Successful!");
-                    resolve();
-                }
-            });
-        });
-    } catch (err) {
-        return res.status(500).send({ dbConnected });
-    }
-    res.status(200).send({ dbConnected });
+// sql.connect(config, err => {
+//     if (err) {
+//       console.log("Error while connecting to database: ", err);
+//       process.exit(1);
+//     }
+  
+//     // store the connection pool in the app object
+//     app.set('dbPool', sql);
+  
+//     console.log("Database connection successful!");
+//   });
+
+sql.connect(config).then(pool => {
+    // store the connection pool in the app object
+    app.set('dbPool', pool);
+  
+    console.log("Database connection successful!");
+}).catch(err => {
+    console.log("Error while connecting to database: ", err);
+    process.exit(1);
 });
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

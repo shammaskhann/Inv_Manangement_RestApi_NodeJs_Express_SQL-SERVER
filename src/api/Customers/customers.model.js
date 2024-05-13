@@ -11,7 +11,8 @@ const sql = require('mssql');
 //    "NoOfOrders": 10
 //   }
 
-const config = require('../../../configuration');
+const config = require('../../../config/configDB');
+
 class Customer {
     static async fetchAll() {
         const pool = new sql.ConnectionPool(config, err => {
