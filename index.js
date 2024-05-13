@@ -5,7 +5,7 @@ const sql = require('mssql');
 const customers = require('./src/api/Customers'); 
 const bodyParser = require('body-parser'); 
 const products = require('./src/api/products/product');
-const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
+//const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
 const config = require('./config/configDB');
 const connectionStatus = require('./src/api/Connection Status/connectionStatus');
 
@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 
 //smalltaginfo
-app.use('/api/smalltaginfo', smalltaginfo);
+//app.use('/api/smalltaginfo', smalltaginfo);
 //customer
 app.use('/api/customers', customers);
 //products
