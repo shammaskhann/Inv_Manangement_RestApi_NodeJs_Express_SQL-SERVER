@@ -3,9 +3,7 @@ const app = express();
 const port = 3000; 
 const sql = require('mssql'); 
 const customers = require('./src/api/Customers'); 
-const bodyParser = require('body-parser'); 
 const products = require('./src/api/Product/product');
-
 const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
 const config = require('./config/configDB');
 const connectionStatus = require('./src/api/Connection Status/connectionStatus');
