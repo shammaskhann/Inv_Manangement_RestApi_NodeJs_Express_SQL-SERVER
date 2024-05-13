@@ -50,16 +50,16 @@ router.get('/getTotalProducts',async (req,res) => {
 );
 
 // //get order count in past 7 days
-// router.get('/getOrderCountPast7Days',async (req,res) => {
-//     const pool = req.app.get('dbPool');
-//     try{
-//         const result= await pool.request().execute("dbo.GetOrderCountInPast7Days");
-//         res.status(200).send(result.recordset);
-//     }catch(err){
-//         res.status(500).send({message: err.message});
-//     }
-// }
-// );
+router.get('/getOrderCountPastWeek',async (req,res) => {
+    const pool = req.app.get('dbPool');
+    try{
+        const result= await pool.request().execute("dbo.GetOrderCountInPast7Days");
+        res.status(200).send(result.recordset);
+    }catch(err){
+        res.status(500).send({message: err.message});
+    }
+}
+);
 
 
 module.exports = router;
