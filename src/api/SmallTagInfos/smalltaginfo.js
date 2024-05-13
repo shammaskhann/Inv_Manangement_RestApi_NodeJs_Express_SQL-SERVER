@@ -29,7 +29,7 @@ router.get('/getTotalSalesToday',async (req,res) => {
 router.get('/getTotalRevenue',async (req,res) => {
     const pool = req.app.get('dbPool');
     try{
-        const result= await pool.request().execute("dbo.getTotalRevenue");
+        const result= await pool.request().query("exec getTotalRevenue");
         res.status(200).send(result.recordset);
     }catch(err){
         res.status(500).send({message: err.message});
@@ -37,17 +37,17 @@ router.get('/getTotalRevenue',async (req,res) => {
 }
 );
 
-// // get Total Products
-// router.get('/getTotalProducts',async (req,res) => {
-//     const pool = req.app.get('dbPool');
-//     try{
-//         const result= await pool.request().execute("dbo.getTotalProducts");
-//         res.status(200).send(result.recordset);
-//     }catch(err){
-//         res.status(500).send({message: err.message});
-//     }
-// }
-// );
+// get Total Products
+router.get('/getTotalProducts',async (req,res) => {
+    const pool = req.app.get('dbPool');
+    try{
+        const result= await pool.request().execute("dbo.getTotalProducts");
+        res.status(200).send(result.recordset);
+    }catch(err){
+        res.status(500).send({message: err.message});
+    }
+}
+);
 
 // //get order count in past 7 days
 // router.get('/getOrderCountPast7Days',async (req,res) => {
