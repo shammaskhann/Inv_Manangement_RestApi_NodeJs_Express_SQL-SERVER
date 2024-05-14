@@ -22,6 +22,8 @@ router.get('/getTop5SellingProduct',async (req,res) => {
         return res.status(500).send({message: "Database connection not available"});
     }
     try{
+        //Select * from dbo.GetTopSellingProducts();
+        const result= await pool.request().query("Select * from dbo.GetTopSellingProducts()");
         res.status(200).send(result.recordset);
     }catch(err){
         res.status(500).send({message: err.message});
