@@ -38,6 +38,7 @@ app.use(express.json());
           process.exit(1);
       }
   });
+  
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
