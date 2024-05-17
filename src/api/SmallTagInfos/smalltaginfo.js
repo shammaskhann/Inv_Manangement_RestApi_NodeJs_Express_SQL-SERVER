@@ -3,6 +3,7 @@ const router = express.Router();
 const sql = require('mssql');
 const config = require('../../../config/configDB');
 
+
 //get no of orders today 
 router.get('/getNoOfOrdersToday',async (req,res) => {
     // const pool = req.app.get('dbPool');

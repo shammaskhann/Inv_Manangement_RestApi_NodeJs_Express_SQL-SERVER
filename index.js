@@ -7,6 +7,7 @@ const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
 const config = require('./config/configDB');
 const connectionStatus = require('./src/api/Connection Status/connectionStatus');
 const graphCharts = require('./src/api/Graph-Charts/graph-charts');
+const order = require('./src/api/Orders/order');
 
 // Use body-parser middleware
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(express.json());
  app.use('/api/products', products);
  app.use('/api/db-connection-status', connectionStatus);
  app.use('/api/graph-charts', graphCharts);
+ app.use('/api/orders', order);
 
 
 

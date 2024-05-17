@@ -1,36 +1,33 @@
 const express = require('express');
 const router = express.Router();
+const sql = require('mssql');
+const config = require('../../../config/configDB');
 
-router.get('/orders',async (req,res) => {
-    const pool = req.app.get('dbPool');
+//Api to Get Order Accoriding to the Period ( coming in param)
+router.get('/getOrderAccToParam/:period',async (req,res) => {
+    const pool = new sql.ConnectionPool(config, err => {
+        if (err) {
+            console.log("Error while connecting to database :- " + err);
+            throw err;
+        }
+        console.log("Connection Successful!");
+    });
+    await pool.connect();
     try{
-        const result= await pool.request().execute("dbo.getOrders");
+        const result= await pool.request().input('Period',req.params.period).execute("dbo.getOrders");
         res.status(200).send(result.recordset);
     }catch(err){
         res.status(500).send({message: err.message});
+    }finally{
+        await pool.close();
+    
     }
 }
 );
-
-router.get('/order/:id',async (req,res) => {
-    const pool = req.app.get('dbPool');
-    try{
-        const result= await pool.request().input('id',req.params.id).execute("dbo.getOrderById");
-        res.status(200).send(result.recordset);
-    }catch(err){
-        res.status(500).send({message: err.message});
-    }
-}
-);
-//create order
-// router.post('/order',async (req,res) => {
+// router.get('/orders',async (req,res) => {
 //     const pool = req.app.get('dbPool');
 //     try{
-//         const result= await pool.request()
-//         .input('orderDate',req.body.orderDate)
-//         .input('customerId',req.body.customerId)
-//         .input('status',req.body.status)
-//         .execute("dbo.createOrder");
+//         const result= await pool.request().execute("dbo.getOrders");
 //         res.status(200).send(result.recordset);
 //     }catch(err){
 //         res.status(500).send({message: err.message});
@@ -38,40 +35,66 @@ router.get('/order/:id',async (req,res) => {
 // }
 // );
 
-//delete order
-router.delete('/order/:id',async (req,res) => {
-    const pool = req.app.get('dbPool');
-    try{
-        const result= await pool.request().input('id',req.params.id).execute("dbo.deleteOrder");
-        res.status(200).send(result.recordset);
-    }catch(err){
-        res.status(500).send({message: err.message});
-    }
-}
-);
+// router.get('/order/:id',async (req,res) => {
+//     const pool = req.app.get('dbPool');
+//     try{
+//         const result= await pool.request().input('id',req.params.id).execute("dbo.getOrderById");
+//         res.status(200).send(result.recordset);
+//     }catch(err){
+//         res.status(500).send({message: err.message});
+//     }
+// }
+// );
+// //create order
+// // router.post('/order',async (req,res) => {
+// //     const pool = req.app.get('dbPool');
+// //     try{
+// //         const result= await pool.request()
+// //         .input('orderDate',req.body.orderDate)
+// //         .input('customerId',req.body.customerId)
+// //         .input('status',req.body.status)
+// //         .execute("dbo.createOrder");
+// //         res.status(200).send(result.recordset);
+// //     }catch(err){
+// //         res.status(500).send({message: err.message});
+// //     }
+// // }
+// // );
 
-//update order status
-router.put('/order/:id',async (req,res) => {
-    const pool = req.app.get('dbPool');
-    try{
-        const result= await pool.request().input('id',req.params.id).input('status',req.body.status).execute("dbo.updateOrder");
-        res.status(200).send(result.recordset);
-    }catch(err){
-        res.status(500).send({message: err.message});
-    }
-}
-);
+// //delete order
+// router.delete('/order/:id',async (req,res) => {
+//     const pool = req.app.get('dbPool');
+//     try{
+//         const result= await pool.request().input('id',req.params.id).execute("dbo.deleteOrder");
+//         res.status(200).send(result.recordset);
+//     }catch(err){
+//         res.status(500).send({message: err.message});
+//     }
+// }
+// );
 
-//get today orders
-router.get('/todayOrders',async (req,res) => {
-    const pool = req.app.get('dbPool');
-    try{
-        const result= await pool.request().execute("dbo.getTodayOrders");
-        res.status(200).send(result.recordset);
-    }catch(err){
-        res.status(500).send({message: err.message});
-    }
-}
-);
+// //update order status
+// router.put('/order/:id',async (req,res) => {
+//     const pool = req.app.get('dbPool');
+//     try{
+//         const result= await pool.request().input('id',req.params.id).input('status',req.body.status).execute("dbo.updateOrder");
+//         res.status(200).send(result.recordset);
+//     }catch(err){
+//         res.status(500).send({message: err.message});
+//     }
+// }
+// );
+
+// //get today orders
+// router.get('/todayOrders',async (req,res) => {
+//     const pool = req.app.get('dbPool');
+//     try{
+//         const result= await pool.request().execute("dbo.getTodayOrders");
+//         res.status(200).send(result.recordset);
+//     }catch(err){
+//         res.status(500).send({message: err.message});
+//     }
+// }
+// );
 
 module.exports = router;

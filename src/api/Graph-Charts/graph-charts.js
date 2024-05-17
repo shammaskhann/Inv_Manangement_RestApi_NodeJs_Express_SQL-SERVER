@@ -6,10 +6,6 @@ const config = require('../../../config/configDB');
 
 
 router.get('/getPastWeekOrder',async (req,res) => {
-    // const pool = req.app.get('dbPool');
-    // if (!pool) {
-    //     return res.status(500).send({message: "Database connection not available"});
-    // }
     const pool = new sql.ConnectionPool(config, err => {
         if (err) {
             console.log("Error while connecting to database :- " + err);
@@ -30,10 +26,6 @@ router.get('/getPastWeekOrder',async (req,res) => {
 );
 
 router.get('/getTopVendorPieChart', async (req,res) => {
-    // const pool = req.app.get('dbPool');
-    // if (!pool) {
-    //     return res.status(500).send({message: "Database connection not available"});
-    // }
     const pool = new sql.ConnectionPool(config, err => {
         if (err) {
             console.log("Error while connecting to database :- " + err);
