@@ -1,13 +1,19 @@
 const express = require('express');
 const app = express();  
 const sql = require('mssql'); 
-const customers = require('./src/api/Customers'); 
+const customers = require('./src/api/Customers/customers'); 
 const products = require('./src/api/Product/product');
 const smalltaginfo = require('./src/api/SmallTagInfos/smalltaginfo');
 const config = require('./config/configDB');
 const connectionStatus = require('./src/api/Connection Status/connectionStatus');
 const graphCharts = require('./src/api/Graph-Charts/graph-charts');
 const order = require('./src/api/Orders/order');
+const shippers = require('./src/api/Shippers/shippers');
+const suppliers = require('./src/api/Suppliers/suppliers');
+const saleschannel = require('./src/api/Sales Channel/saleschannel');
+const inventory = require('./src/api/Inventory/inventory');
+const purchaseOrder = require('./src/api/Purchase Order/purchase_order');
+const invoices = require('./src/api/Invoices/invoices');
 
 // Use body-parser middleware
 app.use(express.json());
@@ -20,6 +26,12 @@ app.use(express.json());
  app.use('/api/db-connection-status', connectionStatus);
  app.use('/api/graph-charts', graphCharts);
  app.use('/api/orders', order);
+  app.use('/api/shippers', shippers);
+  app.use('/api/suppliers', suppliers);
+  app.use('/api/saleschannel', saleschannel);
+  app.use('/api/inventory', inventory);
+  app.use('/api/purchaseOrder', purchaseOrder);
+  app.use('/api/invoices', invoices);
 
 
 
