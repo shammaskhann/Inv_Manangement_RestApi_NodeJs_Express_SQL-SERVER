@@ -14,6 +14,7 @@ const saleschannel = require('./src/api/Sales Channel/saleschannel');
 const inventory = require('./src/api/Inventory/inventory');
 const purchaseOrder = require('./src/api/Purchase Order/purchase_order');
 const invoices = require('./src/api/Invoices/invoices');
+const dropdown = require('./src/api/DropDowns/dropdown');
 
 // Use body-parser middleware
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use(express.json());
   app.use('/api/inventory', inventory);
   app.use('/api/purchaseOrder', purchaseOrder);
   app.use('/api/invoices', invoices);
+  app.use('/api/dropdown', dropdown);
 
 
 
