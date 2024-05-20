@@ -15,7 +15,7 @@ router.get('/getOrderAccToParam/:period',async (req,res) => {
     await pool.connect();
     try{
         const result= await pool.request().input('Period',req.params.period).execute("dbo.getOrders");
-        res.status(200).send(result.recordset);
+        res.status(200).send({ message: "Product Added Successfully!" });
     }catch(err){
         res.status(500).send({message: err.message});
     }finally{
