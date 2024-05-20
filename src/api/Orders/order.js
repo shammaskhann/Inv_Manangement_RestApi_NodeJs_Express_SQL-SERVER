@@ -55,6 +55,17 @@ router.post('/insertOrder',async (req,res) => {
     });
     await pool.connect();
     try{
+
+         // Create a new table and define its structure
+         const table = new sql.Table();
+         table.columns.add('productID', sql.Int);
+         table.columns.add('quantity', sql.Int);
+ 
+         // Populate the table with data
+         req.body.productIDs.forEach(item => {
+             table.rows.add(item.productID, item.quantity);
+         });
+
         const result= await pool.request()
         .input('orderDate',req.body.orderDate)
         .input('customerID',req.body.customerID)
@@ -67,7 +78,7 @@ router.post('/insertOrder',async (req,res) => {
         .input('paymentDate',req.body.paymentDate)
         .input('paymentStatus',req.body.paymentStatus)
         .input('shipperID',req.body.shipperID)
-        .input('productIDs',req.body.productIDs)
+        .input('productIDs',table)
         .execute("dbo.order_insert");
         res.status(200).send({ message: "Product Added Successfully!" });
     }catch(err){
