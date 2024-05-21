@@ -36,7 +36,7 @@ router.post('/insertDiscountCode',async (req,res) => {
     await pool.connect();
     try{
         const result= await pool.request().input('discountcode',req.body.discountcode).input('discountamount',req.body.discountamount).execute("dbo.sp_insertDiscount");
-        res.status(200).send(result.recordset);
+        res.status(200).send({ message: "Discount Code Added Successfully!" });
     }catch(err){
         res.status(500).send({message: err.message});
     }finally{
