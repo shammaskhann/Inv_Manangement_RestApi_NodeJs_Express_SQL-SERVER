@@ -16,12 +16,13 @@ const purchaseOrder = require('./src/api/Purchase Order/purchase_order');
 const invoices = require('./src/api/Invoices/invoices');
 const dropdown = require('./src/api/DropDowns/dropdown');
 const discount = require('./src/api/discount/discount');
+const payemnt = require('./src/api/Payment/payments');
+const shipment = require('./src/api/Shipments/shipments');
 
 // Use body-parser middleware
 app.use(express.json());
 
 
- // Define your routes after the database connection is established
  app.use('/api/smalltaginfo', smalltaginfo);
  app.use('/api/customers', customers);
  app.use('/api/products', products);
@@ -36,9 +37,11 @@ app.use(express.json());
   app.use('/api/invoices', invoices);
   app.use('/api/dropdown', dropdown);
   app.use('/api/discount', discount);
+  app.use('/api/payment', payemnt);
+  app.use('/api/shipment', shipment);
 
 
-
+ 
   sql.connect(config).then(pool => {
       // store the connection pool in the app object
       app.set('dbPool', pool);

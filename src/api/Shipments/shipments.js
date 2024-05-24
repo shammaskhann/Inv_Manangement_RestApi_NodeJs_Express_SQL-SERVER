@@ -3,7 +3,7 @@ const router = express.Router();
 const sql = require('mssql');
 const config = require('../../../config/configDB');
 
-router.get('/getDiscountCodes',async (req,res) => {
+router.get('/getShipments', async (req, res) => {
     const pool = new sql.ConnectionPool(config, err => {
         if (err) {
             console.log("Error while connecting to database :- " + err);
@@ -12,20 +12,19 @@ router.get('/getDiscountCodes',async (req,res) => {
         console.log("Connection Successful!");
     });
     await pool.connect();
-    try{
-        const result= await pool.request().execute("dbo.sp_discounts");
+    try {
+        const result = await pool.request().execute("dbo.sp_ShipmentTracking");
         res.status(200).send(result.recordset);
-    }catch(err){
-        res.status(500).send({message: err.message});
-    }finally{
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    } finally {
         await pool.close();
-    
-    }
-});
 
-router.post('/insertDiscountCode',async (req,res) => {
-    //@discountcode varchar(50),
-//@discountamount DECIMAL(10,2)
+    }
+}
+);
+
+router.get('/getShipment/:id', async (req, res) => {
     const pool = new sql.ConnectionPool(config, err => {
         if (err) {
             console.log("Error while connecting to database :- " + err);
@@ -34,15 +33,15 @@ router.post('/insertDiscountCode',async (req,res) => {
         console.log("Connection Successful!");
     });
     await pool.connect();
-    try{
-        const result= await pool.request().input('discountcode',req.body.discountcode).input('discountamount',req.body.discountamount).execute("dbo.CreateDiscountCode");
-        res.status(200).send({ message: "Discount Code Added Successfully!" });
-    }catch(err){
-        res.status(500).send({message: err.message});
-    }finally{
+    try {
+        const result = await pool.request().input('OrderID', req.params.id).execute("dbo.GetTrackingDetails");
+        res.status(200).send(result.recordset);
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    } finally {
         await pool.close();
-    
-    }
-});
 
+    }
+}
+);
 module.exports = router;
