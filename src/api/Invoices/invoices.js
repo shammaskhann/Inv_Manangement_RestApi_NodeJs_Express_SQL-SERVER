@@ -34,7 +34,7 @@ router.get('/getInvoice/:id', async (req, res) => {
     });
     await pool.connect();
     try {
-        const result = await pool.request().input('id', req.params.id).execute("dbo.invoicebypoid");
+        const result = await pool.request().input('purchaseOrderID', req.params.id).execute("dbo.invoicebypoid");
         res.status(200).send(result.recordset);
     } catch (err) {
         res.status(500).send({ message: err.message });
