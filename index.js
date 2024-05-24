@@ -41,25 +41,26 @@ app.use(express.json());
   app.use('/api/shipment', shipment);
 
 
- 
+
   sql.connect(config).then(pool => {
-      // store the connection pool in the app object
-      app.set('dbPool', pool);
+    // store the connection pool in the app object
+    app.set('dbPool', pool);
 
-     
+   
 
-      console.log("Database connection successful!");
-  }).catch(err => {
-      console.log("Error while connecting to database: ", err);
-      if (retries > 0) {
-          console.log(`Retrying in 5 seconds... (${retries} retries left)`);
-          setTimeout(() => connectToDatabase(retries - 1), 5000);
-      } else {
-          console.log("Failed to connect to database after multiple attempts.");
-          process.exit(1);
-      }
-  });
-  
+    console.log("Database connection successful!");
+}).catch(err => {
+    console.log("Error while connecting to database: ", err);
+    if (retries > 0) {
+        console.log(`Retrying in 5 seconds... (${retries} retries left)`);
+        setTimeout(() => connectToDatabase(retries - 1), 5000);
+    } else {
+        console.log("Failed to connect to database after multiple attempts.");
+        process.exit(1);
+    }
+});
+
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
