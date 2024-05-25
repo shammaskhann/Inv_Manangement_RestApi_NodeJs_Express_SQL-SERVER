@@ -44,4 +44,28 @@ router.get('/getShipment/:id', async (req, res) => {
     }
 }
 );
+
+//update shipment status
+// EXEC UpdateShipmentStatus @OrderID = 1, @NewStatus = 'Delivered';
+
+router.put('/updateShipmentStatus/:id', async (req, res) => {
+    const pool = new sql.ConnectionPool(config, err => {
+        if (err) {
+            console.log("Error while connecting to database :- " + err);
+            throw err;
+        }
+        console.log("Connection Successful!");
+    });
+    await pool.connect();
+    try {
+        const result = await pool.request().input('OrderID', req.params.id).input('NewStatus', req.body.NewStatus).execute("dbo.UpdateShipmentStatus");
+        res.status(200).send(result.recordset);
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    } finally {
+        await pool.close();
+
+    }
+}
+);
 module.exports = router;
