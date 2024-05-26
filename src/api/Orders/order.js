@@ -45,7 +45,8 @@ router.get('/getOrderAccToParam/:period',async (req,res) => {
 //     @shipperID = 1,  -- Replace with actual shipper ID
 //     @productIDs = @productIDs;
 
-router.post('/insertOrder',async (req,res) => {
+// 
+router.post('/insertOrder', async (req, res) => {
     const pool = new sql.ConnectionPool(config, err => {
         if (err) {
             console.log("Error while connecting to database :- " + err);
@@ -54,40 +55,42 @@ router.post('/insertOrder',async (req,res) => {
         console.log("Connection Successful!");
     });
     await pool.connect();
-    try{
+    try {
+        // Create a new table and define its structure
+        const table = new sql.Table();
+        table.columns.add('productID', sql.Int);
+        table.columns.add('quantity', sql.Int);
 
-         // Create a new table and define its structure
-         const table = new sql.Table();
-         table.columns.add('productID', sql.Int);
-         table.columns.add('quantity', sql.Int);
- 
-         // Populate the table with data
-         req.body.productIDs.forEach(item => {
-             table.rows.add(item.productID, item.quantity);
-         });
+        // Populate the table with data
+        req.body.productIDs.forEach(item => {
+            table.rows.add(item.productID, item.quantity);
+        });
 
-        const result= await pool.request()
-        .input('orderDate',req.body.orderDate)
-        .input('customerID',req.body.customerID)
-        .input('discountCode',req.body.discountCode)
-        .input('fulfillmentStatus',req.body.fulfillmentStatus)
-        .input('fulfilledDate',req.body.fulfilledDate)
-        .input('salesChannelID',req.body.salesChannelID)
-        .input('giftCard',req.body.giftCard)
-        .input('paymentMethod',req.body.paymentMethod)
-        .input('paymentDate',req.body.paymentDate)
-        .input('paymentStatus',req.body.paymentStatus)
-        .input('shipperID',req.body.shipperID)
-        .input('productIDs',table)
-        .execute("dbo.order_insert");
+        let paymentDate = req.body.paymentDate;
+        if (paymentDate === '' || paymentDate === 'undefined') {
+            paymentDate = null;
+        }
+
+        const result = await pool.request()
+            .input('orderDate', req.body.orderDate)
+            .input('customerID', req.body.customerID)
+            .input('discountCode', req.body.discountCode)
+            .input('fulfillmentStatus', req.body.fulfillmentStatus)
+            .input('fulfilledDate', req.body.fulfilledDate)
+            .input('salesChannelID', req.body.salesChannelID)
+            .input('giftCard', req.body.giftCard)
+            .input('paymentMethod', req.body.paymentMethod)
+            .input('paymentDate', paymentDate)
+            .input('paymentStatus', req.body.paymentStatus)
+            .input('shipperID', req.body.shipperID)
+            .input('productIDs', table)
+            .execute("dbo.order_insert");
         res.status(200).send({ message: "Product Added Successfully!" });
-    }catch(err){
-        res.status(500).send({message: err.message});
-    }finally{
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    } finally {
         await pool.close();
-    
     }
-}               
-);
+});
 
 module.exports = router;
