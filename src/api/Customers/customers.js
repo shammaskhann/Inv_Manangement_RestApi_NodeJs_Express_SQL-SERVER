@@ -57,4 +57,38 @@ router.post('/addCustomer', async (req, res) => {
 }
 );
 
+//customer update
+// EXEC dbo.customer_update 
+//     @CustomerID = 1, 
+//     @Name = 'New Name', 
+//     @Email = 'newemail@example.com', 
+//     @PhoneNumber = '098-765-4321', 
+//     @Address = 'New Address, City, State';
+
+router.post('/updateCustomer', async (req, res) => {
+    const pool = new sql.ConnectionPool(config, err => {
+        if (err) {
+            console.log("Error while connecting to database :- " + err);
+            throw err;
+        }
+        console.log("Connection Successful!");
+    });
+    await pool.connect();
+    try {
+        const result = await pool.request()
+            .input('CustomerID', sql.Int, req.body.CustomerID)
+            .input('Name', sql.VarChar, req.body.Name)
+            .input('Email', sql.VarChar, req.body.Email)
+            .input('PhoneNumber', sql.VarChar, req.body.PhoneNumber)
+            .input('Address', sql.VarChar, req.body.Address)
+            .execute("dbo.customer_update");
+        res.status(200).send({ message: "Customer Updated Successfully!" });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    } finally {
+        await pool.close();
+    }
+}
+);
+
 module.exports = router;

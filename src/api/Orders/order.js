@@ -71,12 +71,17 @@ router.post('/insertOrder', async (req, res) => {
             paymentDate = null;
         }
 
+        let fulfilledDate = req.body.fulfilledDate;
+        if (fulfilledDate === '' || fulfilledDate === 'undefined') {
+            fulfilledDate = null;
+        }
+
         const result = await pool.request()
             .input('orderDate', req.body.orderDate)
             .input('customerID', req.body.customerID)
             .input('discountCode', req.body.discountCode)
             .input('fulfillmentStatus', req.body.fulfillmentStatus)
-            .input('fulfilledDate', req.body.fulfilledDate)
+            .input('fulfilledDate', fulfilledDate)
             .input('salesChannelID', req.body.salesChannelID)
             .input('giftCard', req.body.giftCard)
             .input('paymentMethod', req.body.paymentMethod)
@@ -92,5 +97,28 @@ router.post('/insertOrder', async (req, res) => {
         await pool.close();
     }
 });
+
+//update fullfillmentStatus of Order using only orderID
+//exec  fulfill_order @order_id
+router.put('/fulfillOrder/:orderID', async (req, res) => {
+    const pool = new sql.ConnectionPool(config, err => {
+        if (err) {
+            console.log("Error while connecting to database :- " + err);
+            throw err;
+        }
+        console.log("Connection Successful!");
+    });
+    await pool.connect();
+    try {
+        const result = await pool.request()
+            .input('order_id', req.params.orderID)
+            .execute("dbo.fulfill_order");
+        res.status(200).send({ message: "Order Fulfilled Successfully!" });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    } finally {
+        await pool.close();
+    }
+});  
 
 module.exports = router;
