@@ -66,6 +66,13 @@ router.post('/addCustomer', async (req, res) => {
 //     @Address = 'New Address, City, State';
 
 router.post('/updateCustomer', async (req, res) => {
+    const { CustomerID, Name, Email, PhoneNumber, Address } = req.body;
+
+    // Check if all fields are provided
+    if (!CustomerID || !Name || !Email || !PhoneNumber || !Address) {
+        return res.status(400).send({ message: "All fields are required" });
+    }
+
     const pool = new sql.ConnectionPool(config, err => {
         if (err) {
             console.log("Error while connecting to database :- " + err);
@@ -76,11 +83,11 @@ router.post('/updateCustomer', async (req, res) => {
     await pool.connect();
     try {
         const result = await pool.request()
-            .input('CustomerID', sql.Int, req.body.CustomerID)
-            .input('Name', sql.VarChar, req.body.Name)
-            .input('Email', sql.VarChar, req.body.Email)
-            .input('PhoneNumber', sql.VarChar, req.body.PhoneNumber)
-            .input('Address', sql.VarChar, req.body.Address)
+            .input('CustomerID', sql.Int, CustomerID)
+            .input('Name', sql.VarChar, Name)
+            .input('Email', sql.VarChar, Email)
+            .input('PhoneNumber', sql.VarChar, PhoneNumber)
+            .input('Address', sql.VarChar, Address)
             .execute("dbo.customer_update");
         res.status(200).send({ message: "Customer Updated Successfully!" });
     } catch (err) {
@@ -88,7 +95,9 @@ router.post('/updateCustomer', async (req, res) => {
     } finally {
         await pool.close();
     }
-}
-);
+});
+
+
+
 
 module.exports = router;
