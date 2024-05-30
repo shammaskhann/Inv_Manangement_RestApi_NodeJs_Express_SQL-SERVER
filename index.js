@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();  
+const cors = require('cors');
 const sql = require('mssql'); 
 const customers = require('./src/api/Customers/customers'); 
 const products = require('./src/api/Product/product');
@@ -21,7 +22,8 @@ const shipment = require('./src/api/Shipments/shipments');
 
 // Use body-parser middleware
 app.use(express.json());
-
+//adds the CORS middleware to your server, which will automatically include the appropriate headers in the response.
+app.use(cors());
 
  app.use('/api/smalltaginfo', smalltaginfo);
  app.use('/api/customers', customers);
