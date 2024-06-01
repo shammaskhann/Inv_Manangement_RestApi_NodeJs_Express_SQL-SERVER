@@ -77,7 +77,7 @@ router.post('/insertOrder', async (req, res) => {
         }
 
         const result = await pool.request()
-            .input('orderDate', req.body.orderDate)
+            // .input('orderDate', req.body.orderDate)
             .input('customerID', req.body.customerID)
             .input('discountCode', req.body.discountCode)
             .input('fulfillmentStatus', req.body.fulfillmentStatus)

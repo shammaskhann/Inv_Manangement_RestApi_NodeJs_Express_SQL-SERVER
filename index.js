@@ -20,10 +20,10 @@ const discount = require('./src/api/discount/discount');
 const payemnt = require('./src/api/Payment/payments');
 const shipment = require('./src/api/Shipments/shipments');
 
-// Use body-parser middleware
-app.use(express.json());
-//adds the CORS middleware to your server, which will automatically include the appropriate headers in the response.
-app.use(cors());
+//  middleware
+app.use(express.json()); //body parser
+
+app.use(cors());//adds the CORS middleware to your server, which will automatically include the appropriate headers in the response.
 
  app.use('/api/smalltaginfo', smalltaginfo);
  app.use('/api/customers', customers);
@@ -45,7 +45,7 @@ app.use(cors());
 
 
   sql.connect(config).then(pool => {
-    // store the connection pool in the app object
+
     app.set('dbPool', pool);
 
    
