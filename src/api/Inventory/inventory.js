@@ -23,4 +23,19 @@ router.get('/getInventory', async (req, res) => {
     }
 }
 );
+router.get('/inventory/:CategoryID', async (req, res) => {
+    const { CategoryID } = req.params;
+    const pool = new sql.ConnectionPool(config);
+    await pool.connect();
+    try {
+        const result = await pool.request()
+            .input('CategoryID', sql.Int, CategoryID)
+            .execute('sp_inventory_by_category');
+        res.status(200).send(result.recordset);
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    } finally {
+        await pool.close();
+    }
+});
 module.exports = router;

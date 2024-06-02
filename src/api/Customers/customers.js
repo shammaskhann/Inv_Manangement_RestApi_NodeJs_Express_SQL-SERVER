@@ -97,6 +97,26 @@ router.post('/updateCustomer', async (req, res) => {
     }
 });
 
+router.post('/login', async (req, res) => {
+    const { Email, Password } = req.body;
+    const pool = new sql.ConnectionPool(config);
+    await pool.connect();
+    try {
+        const result = await pool.request()
+            .input('Email', sql.NVarChar, Email)
+            .input('Password', sql.NVarChar, Password)
+            .execute('LoginCustomer');
+        if (result.recordset[0].ErrorMessage) {
+            res.status(401).send({ message: result.recordset[0].ErrorMessage });
+        } else {
+            res.status(200).send(result.recordset[0]);
+        }
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    } finally {
+        await pool.close();
+    }
+});
 
 
 
