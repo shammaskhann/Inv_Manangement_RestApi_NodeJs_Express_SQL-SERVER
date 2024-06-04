@@ -1,3 +1,14 @@
+
+// module.exports= {
+//     "user": "shammas", // Database username
+//     "password": "shammas0312", // Database password
+//     "server" : "192.168.18.119",  // Server IP address
+//     "database": "shopify_Clone", // Database name
+//     "options": {
+//         "encrypt": false // Disable encryption
+//     }
+// };
+
 module.exports = {
     "user": "projectbukc_ShopifyClone", // Database username
     "password": "project0312", // Database password
@@ -11,15 +22,6 @@ module.exports = {
     }
 };
 
-// var config = {
-//     "user": "shammas", // Database username
-//     "password": "shammas0312", // Database password
-//     //"server": "192.168.18.127", // Server IP address
-//     "database": "shopify_Clone", // Database name
-//     "options": {
-//         "encrypt": false // Disable encryption
-//     }
-// }
 
 //NodeJsApi
 //shammas0312
