@@ -69,10 +69,10 @@ router.post('/addCustomer', async (req, res) => {
 //     @Address = 'New Address, City, State';
 
 router.post('/updateCustomer', async (req, res) => {
-    const { CustomerID, Name, Email, PhoneNumber, Address } = req.body;
+    const { CustomerID, Name, Email, PhoneNumber, Address ,Passowrd} = req.body;
 
     // Check if all fields are provided
-    if (!CustomerID || !Name || !Email || !PhoneNumber || !Address) {
+    if (!CustomerID || !Name || !Email || !PhoneNumber || !Address || !Passowrd) {
         return res.status(400).send({ message: "All fields are required" });
     }
 
