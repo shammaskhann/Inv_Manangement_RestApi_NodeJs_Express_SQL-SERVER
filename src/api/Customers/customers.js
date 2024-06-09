@@ -76,6 +76,16 @@ router.post('/updateCustomer', async (req, res) => {
         return res.status(400).send({ message: "All fields are required" });
     }
 
+    // Check the length of the input values
+    // Check the length of the input values
+    if (req.body.customerName.length > 50 ||
+        req.body.customerEmail.length > 100 ||
+        req.body.customerNum.length > 20 ||
+        req.body.customerAddress.length > 255 ||
+        req.body.customerPassword.length > 8) {
+        throw new Error("Input value is too long");
+    }
+
     const pool = new sql.ConnectionPool(config, err => {
         if (err) {
             console.log("Error while connecting to database :- " + err);
@@ -91,11 +101,13 @@ router.post('/updateCustomer', async (req, res) => {
             .input('Email', sql.VarChar, Email)
             .input('PhoneNumber', sql.VarChar, PhoneNumber)
             .input('Address', sql.VarChar, Address)
-            .input('Passowrd', sql.VarChar, Address)
+            .input('Passowrd', sql.VarChar, Passowrd)
             .execute("dbo.customer_update");
         res.status(200).send({ message: "Customer Updated Successfully!" });
     } catch (err) {
-        res.status(500).send({ message: err.message });
+        // Add a null check before accessing the "message" property
+        const errorMessage = err && err.message ? err.message : "An error occurred";
+        res.status(500).send({ message: errorMessage });
     } finally {
         await pool.close();
     }
