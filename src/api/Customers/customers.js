@@ -72,17 +72,11 @@ router.post('/updateCustomer', async (req, res) => {
     const { CustomerID, Name, Email, PhoneNumber, Address ,Passowrd} = req.body;
 
     // Check if all fields are provided
-    if (!CustomerID || !Name || !Email || !PhoneNumber || !Address || !Passp) {
+    if (!CustomerID || !Name || !Email || !PhoneNumber || !Address || !Passowrd) {
         return res.status(400).send({ message: "All fields are required" });
     }
 
-    const pool = new sql.ConnectionPool(config, err => {
-        if (err) {
-            console.log("Error while connecting to database :- " + err);
-            throw err;
-        }
-        console.log("Connection Successful!");
-    });
+    const pool = new sql.ConnectionPool(config);
     await pool.connect();
     try {
         const result = await pool.request()
