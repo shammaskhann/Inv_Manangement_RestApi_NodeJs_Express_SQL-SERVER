@@ -13,7 +13,10 @@ router.get('/getDiscountCodes',async (req,res) => {
     });
     await pool.connect();
     try{
+        console.log("exec dbo.sp_discounts")
+
         const result= await pool.request().execute("dbo.sp_discounts");
+        console.log(result.recordset);
         res.status(200).send(result.recordset);
     }catch(err){
         res.status(500).send({message: err.message});
@@ -34,8 +37,10 @@ router.post('/insertDiscountCode',async (req,res) => {
         console.log("Connection Successful!");
     });
     await pool.connect();
+    console.log("exec dbo.CreateDiscountCode");
     try{
         const result= await pool.request().input('discountcode',req.body.discountcode).input('discountamount',req.body.discountamount).execute("dbo.CreateDiscountCode");
+        console.log(result.recordset);
         res.status(200).send({ message: "Discount Code Added Successfully!" });
     }catch(err){
         res.status(500).send({message: err.message});

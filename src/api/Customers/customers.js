@@ -15,7 +15,9 @@ router.use('/getCustomers', async (req, res) => {
     });
     await pool.connect();
     try {
+        console.log("exec dbo.customer_vu")
         const result = await pool.request().execute("dbo.customer_vu");
+        console.log(result.recordset);
         res.status(200).send(result.recordset);
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -35,6 +37,8 @@ router.post('/addCustomer', async (req, res) => {
         console.log("Connection Successful!");
     });
     await pool.connect();
+    console.log("exec dbo.customer_insert");
+    console.log('Params: ' + req.body.customerName + ' ' + req.body.customerEmail + ' ' + req.body.customerNum + ' ' + req.body.customerAddress + ' ' + req.body.customerPassword);
     try {
         // Check the length of the input values
         if (req.body.customerName.length > 50 ||
@@ -52,6 +56,7 @@ router.post('/addCustomer', async (req, res) => {
             .input('customerAddress', sql.VarChar, req.body.customerAddress)
             .input('customerPassword', sql.VarChar, req.body.customerPassword)
             .execute("dbo.customer_insert");
+            console.log(result.recordset);
         res.status(200).send({ message: "Customer Added Successfully!" });
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -78,6 +83,8 @@ router.post('/updateCustomer', async (req, res) => {
 
     const pool = new sql.ConnectionPool(config);
     await pool.connect();
+    console.log("exec dbo.customer_update");
+    console.log('Params: ' + CustomerID + ' ' + Name + ' ' + Email + ' ' + PhoneNumber + ' ' + Address + ' ' + Passowrd);
     try {
         const result = await pool.request()
             .input('CustomerID', sql.Int, CustomerID)
@@ -87,6 +94,7 @@ router.post('/updateCustomer', async (req, res) => {
             .input('Address', sql.VarChar, Address)
             .input('Passowrd', sql.VarChar, Passowrd)
             .execute("dbo.customer_update");
+            console.log(result.recordset);
         res.status(200).send({ message: "Customer Updated Successfully!" });
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -101,11 +109,15 @@ router.post('/login', async (req, res) => {
     const pool = new sql.ConnectionPool(config);
     await pool.connect();
     try {
+        console.log("exec LoginCustomer");
+        console.log('Params: ' + Email + ' ' + Password);
         const result = await pool.request()
             .input('Email', sql.NVarChar, Email)
             .input('Password', sql.NVarChar, Password)
             .execute('LoginCustomer');
+        console.log(result.recordset);
         if (result.recordset[0].ErrorMessage) {
+            
             res.status(401).send({ message: result.recordset[0].ErrorMessage });
         } else {
             res.status(200).send(result.recordset[0]);
@@ -120,9 +132,12 @@ router.get('/getCustomerOrderHistory/:customerID', async (req, res) => {
     const pool = new sql.ConnectionPool(config);
     await pool.connect();
     try {
+        console.log("exec getCustomerOrderHistory");
+        console.log('Params: ' + req.params.customerID);
         const result = await pool.request()
             .input('customerID', sql.Int, req.params.customerID)
             .execute('getCustomerOrderHistory');
+        console.log(result.recordset);
         res.status(200).send(result.recordset);
     } catch (err) {
         res.status(500).send({ message: err.message });

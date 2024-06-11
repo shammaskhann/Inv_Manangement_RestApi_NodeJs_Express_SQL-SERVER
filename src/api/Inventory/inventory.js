@@ -12,8 +12,10 @@ router.get('/getInventory', async (req, res) => {
         console.log("Connection Successful!");
     });
     await pool.connect();
+    console.log("exec dbo.sp_inventory");
     try {
         const result = await pool.request().execute("dbo.sp_inventory");
+        console.log(result.recordset);
         res.status(200).send(result.recordset);
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -28,9 +30,12 @@ router.get('/inventory/:CategoryID', async (req, res) => {
     const pool = new sql.ConnectionPool(config);
     await pool.connect();
     try {
+        console.log("exec sp_inventory_by_category")
+
         const result = await pool.request()
             .input('CategoryID', sql.Int, CategoryID)
             .execute('sp_inventory_by_category');
+        console.log(result.recordset);
         res.status(200).send(result.recordset);
     } catch (err) {
         res.status(500).send({ message: err.message });
